@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حساب الموزونة - تفاعلي</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.8s;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 350px;
+      transition: background-color 0.8s;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+      font-size: 28px;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: color 0.8s;
+    }
+
+    .bar {
+      height: 25px;
+      border-radius: 12px;
+      background-color: #ddd;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      width: 0%;
+      text-align: center;
+      color: white;
+      font-weight: bold;
+      line-height: 25px;
+      border-radius: 12px;
+      transition: width 0.5s, background-color 0.5s;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>حساب الموزونة</h1>
+    <div class="note">⚠️ إصدار تجريبي فقط</div>
+
+    <input type="number" id="secondary" placeholder="درجة الثانوية (30%)" min="0" max="100">
+    <input type="number" id="qudrat" placeholder="درجة القدرات (30%)" min="0" max="100">
+    <input type="number" id="tahseeli" placeholder="درجة التحصيلي (40%)" min="0" max="100">
+
+    <div class="bar">
+      <div id="fill" class="fill">0</div>
+    </div>
+
+    <div id="result" class="result"></div>
+  </div>
+
+<script>
+  const secondaryInput = document.getElementById('secondary');
+  const qudratInput = document.getElementById('qudrat');
+  const tahseeliInput = document.getElementById('tahseeli');
+  const fill = document.getElementById('fill');
+  const resultDiv = document.getElementById('result');
+  const body = document.body;
+  const container = document.querySelector('.container');
+
+  function updateWeighted() {
+    const secondary = parseFloat(secondaryInput.value) || 0;
+    const qudrat = parseFloat(qudratInput.value) || 0;
+    const tahseeli = parseFloat(tahseeliInput.value) || 0;
+
+    const weighted = (secondary * 0.3) + (qudrat * 0.3) + (tahseeli * 0.4);
+    fill.textContent = weighted.toFixed(2);
+
+    let color = '';
+    let message = '';
+    let bgColor = '';
+
+    if (weighted >= 90) {
+      color = '#4caf50';
+      message = '🌟 ممتاز، وفقك الله وسدد خطاك';
+      bgColor = '#d0f0c0';
+    } else if (weighted >= 85) {
+      color = '#4caf50';
+      message = '🟢 ممتاز يا بطل';
+      bgColor = '#c8f7c5';
+    } else if (weighted >= 75) {
+      color = '#ff9800';
+      message = '🟠 ممتاز';
+      bgColor = '#fff4c2';
+    } else if (weighted >= 60) {
+      color = '#f44336';
+      message = '🔴 شد حيلك وحاول ترفع درجاتك';
+      bgColor = '#ffe5d5';
+    } else {
+      color = '#555';
+      message = '⚫ ضعف النتائج، حاول أقوى المرات الجاية';
+      bgColor = '#e0e0e0';
+    }
+
+    fill.style.width = weighted + '%';
+    fill.style.backgroundColor = color;
+    resultDiv.textContent = message;
+    resultDiv.style.color = color;
+
+    // تغيير لون خلفية الموقع كله حسب الدرجة
+    body.style.backgroundColor = bgColor;
+  }
+
+  secondaryInput.addEventListener('input', updateWeighted);
+  qudratInput.addEventListener('input', updateWeighted);
+  tahseeliInput.addEventListener('input', updateWeighted);
+</script>
+
+</body>
+</html>
